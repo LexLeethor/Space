@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Space Simulator</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <img src="./space.jpg" alt="" class="bgImage">
+  <canvas id="canvas2"></canvas>
+  <canvas id="canvas3"></canvas>
+  <canvas id="webglCanvas"></canvas>
+  <canvas id="canvas"></canvas>
+
+  <button class="menu-btn" popovertarget="menu">
+    <span class="">Settings</span>
+  </button>
+  
+  <nav popover id="menu">
+    <button class="close-btn" popovertarget="menu" popovertargetaction="hide">
+      <span aria-hidden="true">❌</span>
+      <span class="sr-only">Close menu</span>
+    </button>
+
+    <h3>Settings</h3>
+
+    <div class="menu-items">
+
+      <div class="menu-item misc">
+        <button type="button" id="reset">Reset<span>(r)</span></button>
+      </div>
+
+      <div class="menu-item misc">
+        <button type="button" id="showControls" class="minimal-btn">Show All Controls</button>
+      </div>
+
+      <div class="menu-item">
+        <label for="collision">Body Collision<span>(x)</span></label>
+        <input type="checkbox" id="collision" checked>
+      </div>
+
+      <div class="menu-item">
+        <label for="massTransfer">Mass Transfer</label>
+        <input type="checkbox" id="massTransfer" checked>
+      </div>
+      
+      <div class="menu-item">
+        <label for="showVelocities">Show Velocities</label>
+        <input type="checkbox" id="showVelocities" checked>
+      </div>
+
+      <div class="menu-item">
+        <label for="velocityUnit">Velocity Unit</label>
+        <button type="button" id="velocityUnit">m/s</button>
+      </div>
+
+      <div class="menu-item">
+        <label for="showLabels">Show Labels</label>
+        <input type="checkbox" id="showLabels" checked>
+      </div>
+
+      <div class="menu-item">
+        <label for="timeScale">Time Scale<span>(&lt; &gt;)</span></label>
+        <input type="number" id="timeScale" min="0.1" max="100" step="0.1" value="1">
+      </div>
+
+      <hr/>
+
+      <h5>Improve Performance</h5>
+      <div class="menu-item">
+        <label for="showTrails">Show Trails</label>
+        <input type="checkbox" id="showTrails" checked>
+      </div>
+
+      <div class="menu-item">
+        <label for="showStars">Show stars</label>
+        <input type="checkbox" id="showStars" checked>
+      </div>
+
+      <hr/>
+
+      <h5>Camera</h5>
+      <div class="menu-item">
+        <label>Controls</label>
+        <label>↑↓←→ </label>
+      </div>
+
+      <div class="menu-item">
+        <label for="followCam">Follow Camera<span>(c)</span></label>
+        <input type="checkbox" id="followCam">
+      </div>
+
+      <div class="menu-item">
+        <label for="camSpeed">Camera Speed</label>
+        <input type="number" id="camSpeed" value="5" min="1" max="100" step="1">
+      </div>
+
+      <div class="menu-item">
+        <button type="button" id="prev">Follow Prev<span>(n)</span></button>
+        <button type="button" id="next">Follow Next<span>(m)</span></button>
+      </div>
+      <div class="menu-item misc">
+        <button type="button" id="centerMass">Follow Center of Mass</button>
+      </div>
+
+      <div class="menu-item">
+        <label>Zoom</label>
+        <label>(<span>Scroll Wheel</span> )</label>
+      </div>
+
+      <div class="menu-item misc">
+        <button type="button" id="zoomMinus">Zoom In</button>
+        <button type="button" id="zoomPlus">Zoom Out</button>
+      </div>
+
+      <hr/>
+
+      <h5>Planet</h5>
+
+      <div class="menu-item">
+        <label for="PlanetRadius">Radius</label>
+        <input type="number" id="PlanetRadius" value="4" min="0.5" max="20" step="0.5">
+      </div>
+
+      <div class="menu-item">
+        <label for="PlanetDensity">Density</label>
+        <input type="number" id="PlanetDensity" value="0.5" min="0.1" max="10" step="0.1">
+      </div>
+
+      <div class="menu-item">
+        <label for="PlanetColor">Color</label>
+        <input type="color" id="PlanetColor" value="#ffffff">
+      </div>
+
+      <hr/>
+
+      <h5>Star</h5>
+      <div class="menu-item">
+        <label for="StarRadius">Radius</label>
+        <input type="number" id="StarRadius" value="10" min="1" max="50" step="1">
+      </div>
+
+      <div class="menu-item">
+        <label for="StarDensity">Density</label>
+        <input type="number" id="StarDensity" value="15" min="1" max="50" step="1">
+      </div>
+
+      <div class="menu-item">
+        <label for="StarColor">Color</label>
+        <input type="color" id="StarColor" value="#ffa500">
+      </div>
+
+      <hr/>
+
+      <h5>Black Hole</h5>
+      <div class="menu-item">
+        <label for="BlackHoleRadius">Radius</label>
+        <input type="number" id="BlackHoleRadius" value="15" min="1" max="50" step="1">
+      </div>
+
+      <div class="menu-item">
+        <label for="BlackHoleDensity">Density</label>
+        <input type="number" id="BlackHoleDensity" value="120" min="10" max="500" step="10">
+      </div>
+
+      <div class="menu-item">
+        <label for="BlackHoleColor">Color</label>
+        <input type="color" id="BlackHoleColor" value="#000000">
+      </div>
+
+      <hr/>
+
+      <h5>Gravity Field Visualization</h5>
+      <div class="menu-item">
+        <label for="showGravityGrid">Warped Grid<span>(g)</span></label>
+        <input type="checkbox" id="showGravityGrid">
+      </div>
+
+      <div class="menu-item">
+        <label for="showGravityHeatmap">Heatmap<span>(h)</span></label>
+        <input type="checkbox" id="showGravityHeatmap">
+      </div>
+
+      <div class="menu-item">
+        <label for="showGravityVectors">Field Vectors<span>(j)</span></label>
+        <input type="checkbox" id="showGravityVectors">
+      </div>
+
+      <div class="menu-item">
+        <label for="showGravityContours">Contours<span>(k)</span></label>
+        <input type="checkbox" id="showGravityContours">
+      </div>
+
+      <div class="menu-item">
+        <label for="gravityGridOpacity">Grid Opacity</label>
+        <input type="range" id="gravityGridOpacity" min="0" max="1" step="0.05" value="1">
+      </div>
+
+      <div class="menu-item">
+        <label for="gravityHeatmapOpacity">Heatmap Opacity</label>
+        <input type="range" id="gravityHeatmapOpacity" min="0" max="1" step="0.05" value="0.85">
+      </div>
+
+      <div class="menu-item">
+        <label for="gravityVectorOpacity">Vector Opacity</label>
+        <input type="range" id="gravityVectorOpacity" min="0" max="1" step="0.05" value="1">
+      </div>
+
+      <div class="menu-item">
+        <label for="gravityContourOpacity">Contour Opacity</label>
+        <input type="range" id="gravityContourOpacity" min="0" max="1" step="0.05" value="0.9">
+      </div>
+
+      <div class="menu-item">
+        <label for="gravityWarpStrength">Warp Strength</label>
+        <input type="range" id="gravityWarpStrength" min="0.1" max="3" step="0.1" value="1">
+      </div>
+
+      <hr/>
+
+      <h5>Space Probe</h5>
+      <div class="menu-item misc">
+        <span style="font-size: 12px; color: #aaa;">Press <strong>0</strong> to toggle probe mode</span>
+      </div>
+      <div class="menu-item misc">
+        <span style="font-size: 11px; color: #888;">Click to place, Ctrl/Cmd+Click to transition</span>
+      </div>
+
+      <hr/>
+
+      <h5>Spawn Presets (num keys: select then click)</h5>
+      <div class="menu-item misc">
+        <button type="button" id="threeBody">Three Body Problem<span>(4)</span></button>
+      </div>
+
+      <div class="menu-item misc">
+        <button type="button" id="galaxySpawn">Mini Galaxy<span>(5)</span></button>
+      </div>
+
+      <div class="menu-item misc">
+        <button type="button" id="solarSystem">Solar System<span>(6)</span></button>
+      </div>
+
+      <div class="menu-item misc">
+        <button type="button" id="cluster">Planet Cluster (15)</button>
+      </div>
+
+      <div class="menu-item misc">
+        <button type="button" id="lightSpeedP">1/1000th Light Speed Planet</button>
+      </div>
+
+      <hr/>
+
+      <h5>Developer Mode</h5>
+      <div class="menu-item misc">
+        <button type="button" id="devModeToggle">Enable Dev Mode<span>(~)</span></button>
+      </div>
+
+      <div class="menu-item dev-item" style="display: none;">
+        <label for="showFPS">Show FPS<span>(f)</span></label>
+        <input type="checkbox" id="showFPS">
+      </div>
+
+      <div class="menu-item dev-item" style="display: none;">
+        <label for="showBHNodes">Barnes-Hut Nodes</label>
+        <input type="checkbox" id="showBHNodes">
+      </div>
+
+      <div class="menu-item dev-item" style="display: none;">
+        <label for="showBHCenterOfMass">Barnes-Hut Center of Mass</label>
+        <input type="checkbox" id="showBHCenterOfMass">
+      </div>
+
+      <div class="menu-item dev-item" style="display: none;">
+        <label for="showTrailPoints">Show Trail Points</label>
+        <input type="checkbox" id="showTrailPoints">
+      </div>
+
+      <div class="menu-item misc dev-item" style="display: none;">
+        <button type="button" id="deterministicTest">Deterministic Test<span>(y)</span></button>
+      </div>
+
+    </div>
+  </nav>
+
+  <div popover id="controlsModal">
+    <button class="close-btn" popovertarget="controlsModal" popovertargetaction="hide">
+      <span aria-hidden="true">❌</span>
+      <span class="sr-only">Close</span>
+    </button>
+
+    <h3>Controls & Keybinds</h3>
+    
+    <div class="controls-content">
+      <h4>Space Probe</h4>
+      <div class="control-item">
+        <span class="key">0</span>
+        <span class="desc">Toggle Probe Mode</span>
+      </div>
+      <div class="control-item">
+        <span class="key">Click (in Probe Mode)</span>
+        <span class="desc">Place/Move probe</span>
+      </div>
+      <div class="control-item">
+        <span class="key">Ctrl/Cmd + Click</span>
+        <span class="desc">Smooth probe transition</span>
+      </div>
+      <div class="control-item">
+        <span class="key">Backspace (in Probe Mode)</span>
+        <span class="desc">Delete probe</span>
+      </div>
+
+      <h4>Body Selection & Placement</h4>
+      <div class="control-item">
+        <span class="key">ESC</span>
+        <span class="desc">Deselect body</span>
+      </div>
+      <div class="control-item">
+        <span class="key">1</span>
+        <span class="desc">Select Planet</span>
+      </div>
+      <div class="control-item">
+        <span class="key">2</span>
+        <span class="desc">Select Star</span>
+      </div>
+      <div class="control-item">
+        <span class="key">3</span>
+        <span class="desc">Select Black Hole</span>
+      </div>
+      <div class="control-item">
+        <span class="key">Click</span>
+        <span class="desc">Place selected body</span>
+      </div>
+      <div class="control-item">
+        <span class="key">Click + Drag</span>
+        <span class="desc">Launch body with velocity</span>
+      </div>
+      <div class="control-item">
+        <span class="key">Right Click</span>
+        <span class="desc">Cancel launch/drag</span>
+      </div>
+
+      <h4>Camera Controls</h4>
+      <div class="control-item">
+        <span class="key">W A S D</span>
+        <span class="desc">Move camera</span>
+      </div>
+      <div class="control-item">
+        <span class="key">↑ ↓ ← →</span>
+        <span class="desc">Move camera</span>
+      </div>
+      <div class="control-item">
+        <span class="key">Shift</span>
+        <span class="desc">Fast camera movement (hold)</span>
+      </div>
+      <div class="control-item">
+        <span class="key">Ctrl</span>
+        <span class="desc">Slow camera movement (hold)</span>
+      </div>
+      <div class="control-item">
+        <span class="key">Scroll</span>
+        <span class="desc">Zoom in/out</span>
+      </div>
+      <div class="control-item">
+        <span class="key">Click + Drag</span>
+        <span class="desc">Pan camera (when no body selected)</span>
+      </div>
+
+      <h4>Body Following</h4>
+      <div class="control-item">
+        <span class="key">C</span>
+        <span class="desc">Toggle follow mode</span>
+      </div>
+      <div class="control-item">
+        <span class="key">E</span>
+        <span class="desc">Follow next body</span>
+      </div>
+      <div class="control-item">
+        <span class="key">Q</span>
+        <span class="desc">Follow previous body</span>
+      </div>
+      <div class="control-item">
+        <span class="key">P</span>
+        <span class="desc">Pin/Unpin followed body</span>
+      </div>
+      <div class="control-item">
+        <span class="key">Backspace</span>
+        <span class="desc">Delete followed body</span>
+      </div>
+
+      <h4>Simulation Controls</h4>
+      <div class="control-item">
+        <span class="key">Space</span>
+        <span class="desc">Pause/Resume simulation</span>
+      </div>
+      <div class="control-item">
+        <span class="key">- / =</span>
+        <span class="desc">Decrease/Increase time scale</span>
+      </div>
+      <div class="control-item">
+        <span class="key">&lt; / &gt;</span>
+        <span class="desc">Decrease/Increase time scale</span>
+      </div>
+      <div class="control-item">
+        <span class="key">X</span>
+        <span class="desc">Toggle collision</span>
+      </div>
+      <div class="control-item">
+        <span class="key">R</span>
+        <span class="desc">Reset simulation</span>
+      </div>
+
+      <h4>Presets & Scenarios</h4>
+      <div class="control-item">
+        <span class="key">4</span>
+        <span class="desc">Three Body Problem</span>
+      </div>
+      <div class="control-item">
+        <span class="key">5</span>
+        <span class="desc">Mini Galaxy</span>
+      </div>
+      <div class="control-item">
+        <span class="key">6</span>
+        <span class="desc">Solar System</span>
+      </div>
+      <div class="control-item">
+        <span class="key">7</span>
+        <span class="desc">Binary Star System</span>
+      </div>
+      <div class="control-item">
+        <span class="key">8</span>
+        <span class="desc">Meteor Shower</span>
+      </div>
+      <div class="control-item">
+        <span class="key">9</span>
+        <span class="desc">Stress Test (3000 planets)</span>
+      </div>
+
+      <h4>Gravity Visualizations</h4>
+      <div class="control-item">
+        <span class="key">G</span>
+        <span class="desc">Toggle warped grid</span>
+      </div>
+      <div class="control-item">
+        <span class="key">H</span>
+        <span class="desc">Toggle heatmap</span>
+      </div>
+      <div class="control-item">
+        <span class="key">J</span>
+        <span class="desc">Toggle field vectors</span>
+      </div>
+      <div class="control-item">
+        <span class="key">K</span>
+        <span class="desc">Toggle contours</span>
+      </div>
+
+      <h4>Other</h4>
+      <div class="control-item">
+        <span class="key">L</span>
+        <span class="desc">Replay instructions</span>
+      </div>
+      <div class="control-item">
+        <span class="key">.</span>
+        <span class="desc">Clear prompts</span>
+      </div>
+      <div class="control-item">
+        <span class="key">Z</span>
+        <span class="desc">Toggle debug points</span>
+      </div>
+    </div>
+  </div>
+
+</body>
+<script src="./variables/constAndVars.js"></script>
+<script src="./variables/domElements.js"></script>
+<script src="index.js" type="module"></script>
+</html>
